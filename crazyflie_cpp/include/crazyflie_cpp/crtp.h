@@ -3,29 +3,29 @@
 #define CRTP_MAX_DATA_SIZE 30
 
 // Header
-struct crtp
-{
-  constexpr crtp(uint8_t port, uint8_t channel)
-    : channel(channel)
-    , link(3)
-    , port(port)
-  {
-  }
+struct crtp {
+    constexpr crtp(uint8_t port, uint8_t channel)
+            : channel(channel), link(3), port(port), type(1) {
+    }
 
-  crtp(uint8_t byte)
-  {
-    channel = (byte >> 0) & 0x3;
-    link    = (byte >> 2) & 0x3;
-    port    = (byte >> 4) & 0xF;
-  }
+    constexpr crtp(uint8_t port, uint8_t channel, uint8_t type)
+            : channel(channel), link(3), port(port), type(type) {
+    }
 
-  bool operator==(const crtp& other) const {
-    return channel == other.channel && port == other.port;
-  }
+    crtp(uint8_t byte) {
+        channel = (byte >> 0) & 0x3;
+        link = (byte >> 2) & 0x3;
+        port = (byte >> 4) & 0xF;
+    }
 
-  uint8_t channel:2;
-  uint8_t link:2;
-  uint8_t port:4;
+    bool operator==(const crtp &other) const {
+        return channel == other.channel && port == other.port;
+    }
+
+    uint8_t type: 3;
+    uint8_t channel:2;
+    uint8_t link:2;
+    uint8_t port:4;
 } __attribute__((packed));
 
 // Packet structure definition
@@ -184,25 +184,28 @@ struct crtpParamValueResponse
 
 // Port 3 (Commander)
 
-struct crtpSetpointRequest
-{
-  crtpSetpointRequest(
-    float roll,
-    float pitch,
-    float yawrate,
-    uint16_t thrust)
-    : header(0x03, 0)
-    , roll(roll)
-    , pitch(pitch)
-    , yawrate(yawrate)
-    , thrust(thrust)
-  {
-  }
-  const crtp header;
-  float roll;
-  float pitch;
-  float yawrate;
-  uint16_t thrust;
+struct crtpSetpointRequest {
+    crtpSetpointRequest(
+            float roll,
+            float pitch,
+            float yawrate,
+            uint16_t thrust,
+            uint8_t type,
+            float m1,
+            float m2,
+            float m3,
+            float m4)
+            : header(0x07, 0, type), roll(roll), pitch(pitch), yawrate(yawrate), thrust(thrust), m1(m1), m2(m2), m3(m3), m4(m4) {
+    }
+    float m1;
+    float m2;
+    float m3;
+    float m4;
+    const crtp header;
+    float roll;
+    float pitch;
+    float yawrate;
+    uint16_t thrust;
 }  __attribute__((packed));
 
 // Port 4 (Memory access)

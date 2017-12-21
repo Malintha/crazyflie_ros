@@ -253,17 +253,21 @@ private:
   }
 
   void cmdVelChanged(
-    const geometry_msgs::Twist::ConstPtr& msg)
-  {
-    if (!m_isEmergency) {
-      float roll = msg->linear.y + m_roll_trim;
-      float pitch = - (msg->linear.x + m_pitch_trim);
-      float yawrate = msg->angular.z;
-      uint16_t thrust = std::min<uint16_t>(std::max<float>(msg->linear.z, 0.0), 60000);
+    const geometry_msgs::Twist::ConstPtr& msg) {
+      if (!m_isEmergency) {
+          float roll = msg->linear.y + m_roll_trim;
+          float pitch = -(msg->linear.x + m_pitch_trim);
+          float yawrate = msg->angular.z;
+          float m1 = msg->linear.x;
+          float m2 = msg->linear.y;
+          float m3 = msg->linear.z;
+          float m4 = msg->angular.x;
+          uint8_t type = 6;
+          uint16_t thrust = std::min<uint16_t>(std::max<float>(msg->linear.z, 0.0), 60000);
 
-      m_cf.sendSetpoint(roll, pitch, yawrate, thrust);
-      m_sentSetpoint = true;
-    }
+          m_cf.sendSetpoint(roll, pitch, yawrate, thrust, type, m1, m2, m3, m4);
+          m_sentSetpoint = true;
+      }
   }
 
   void positionMeasurementChanged(
@@ -397,7 +401,7 @@ private:
 
     // Send 0 thrust initially for thrust-lock
     for (int i = 0; i < 100; ++i) {
-       m_cf.sendSetpoint(0, 0, 0, 0);
+      m_cf.sendSetpoint(0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
     while(!m_isEmergency) {
@@ -416,7 +420,7 @@ private:
 
     // Make sure we turn the engines off
     for (int i = 0; i < 100; ++i) {
-       m_cf.sendSetpoint(0, 0, 0, 0);
+      m_cf.sendSetpoint(0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
   }

@@ -80,7 +80,13 @@ public:
     float roll,
     float pitch,
     float yawrate,
-    uint16_t thrust);
+    uint16_t thrust,
+    uint8_t type,
+    float m1,
+    float m2,
+    float m3,
+    float m4
+  );
 
   void sendExternalPositionUpdate(
     float x,
