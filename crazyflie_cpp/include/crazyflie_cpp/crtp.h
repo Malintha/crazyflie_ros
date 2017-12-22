@@ -5,10 +5,7 @@
 // Header
 struct crtp {
     constexpr crtp(uint8_t port, uint8_t channel)
-            : channel(channel), link(3), port(port), type(0) {
-    }
-    constexpr crtp(uint8_t port, uint8_t channel, uint8_t type)
-            : channel(channel), link(3), port(port), type(type) {
+            : channel(channel), link(3), port(port) {
     }
 
     crtp(uint8_t byte) {
@@ -23,6 +20,14 @@ struct crtp {
 
     uint8_t channel:2;
     uint8_t link:2;
+    uint8_t port:4;
+} __attribute__((packed));
+
+struct crtpGenericHeader {
+    constexpr crtpGenericHeader(uint8_t type)
+    : channel(0), port(0x07), type(type) {
+    }
+    uint8_t channel:2;
     uint8_t port:4;
     uint8_t type:2;
 } __attribute__((packed));
@@ -211,13 +216,13 @@ struct crtpMotorThrustsRequest
             uint16_t m2,
             uint16_t m3,
             uint16_t m4)
-            : header(0x07, 0, 6)
+            : header(6)
             , m1(m1)
             , m2(m2)
             , m3(m3)
             , m4(m4)
     {}
-    const crtp header;
+    const crtpGenericHeader header;
     uint16_t m1;
     uint16_t m2;
     uint16_t m3;
