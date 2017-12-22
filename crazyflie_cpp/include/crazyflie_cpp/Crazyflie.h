@@ -82,7 +82,9 @@ public:
     float yawrate,
     uint16_t thrust);
 
-  void sendExternalPositionUpdate(
+    void sendSetThrustRequest(uint16_t m1, uint16_t m2, uint16_t m3, uint16_t m4);
+
+    void sendExternalPositionUpdate(
     float x,
     float y,
     float z);

@@ -71,6 +71,7 @@ public:
     , m_serviceEmergency()
     , m_serviceUpdateParams()
     , m_subscribeCmdVel()
+    , m_subscribeCmdThrust()
     , m_subscribeExternalPosition()
     , m_pubImu()
     , m_pubTemp()
@@ -82,9 +83,12 @@ public:
     , m_sentExternalPosition(false)
   {
     ros::NodeHandle n;
-    m_subscribeCmdVel = n.subscribe(tf_prefix + "/cmd_vel", 1, &CrazyflieROS::cmdVelChanged, this);
-    m_subscribeExternalPosition = n.subscribe(tf_prefix + "/external_position", 1, &CrazyflieROS::positionMeasurementChanged, this);
-    m_serviceEmergency = n.advertiseService(tf_prefix + "/emergency", &CrazyflieROS::emergency, this);
+      m_subscribeCmdVel = n.subscribe(tf_prefix + "/cmd_vel", 1, &CrazyflieROS::cmdVelChanged, this);
+      m_subscribeCmdThrust = n.subscribe(tf_prefix + "/cmd_thrust", 1, &CrazyflieROS::cmdThrustChanged, this);
+
+      m_subscribeExternalPosition = n.subscribe(tf_prefix + "/external_position", 1,
+                                                &CrazyflieROS::positionMeasurementChanged, this);
+      m_serviceEmergency = n.advertiseService(tf_prefix + "/emergency", &CrazyflieROS::emergency, this);
 
     if (m_enable_logging_imu) {
       m_pubImu = n.advertise<sensor_msgs::Imu>(tf_prefix + "/imu", 10);
@@ -265,6 +269,15 @@ private:
       m_sentSetpoint = true;
     }
   }
+
+    void cmdThrustChanged(const geometry_msgs::Twist::ConstPtr& msg) {
+        uint16_t m1 = (uint16_t)msg->linear.x;
+        uint16_t m2 = (uint16_t)msg->linear.y;
+        uint16_t m3 = (uint16_t)msg->linear.z;
+        uint16_t m4 = (uint16_t)msg->angular.x;
+        m_cf.sendSetThrustRequest(m1, m2, m3, m4);
+    }
+
 
   void positionMeasurementChanged(
     const geometry_msgs::PointStamped::ConstPtr& msg)
@@ -540,7 +553,8 @@ private:
 
   ros::ServiceServer m_serviceEmergency;
   ros::ServiceServer m_serviceUpdateParams;
-  ros::Subscriber m_subscribeCmdVel;
+    ros::Subscriber m_subscribeCmdVel;
+    ros::Subscriber m_subscribeCmdThrust;
   ros::Subscriber m_subscribeExternalPosition;
   ros::Publisher m_pubImu;
   ros::Publisher m_pubTemp;

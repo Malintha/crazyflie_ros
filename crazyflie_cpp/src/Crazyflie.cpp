@@ -125,6 +125,11 @@ void Crazyflie::sendSetpoint(
   sendPacket((const uint8_t*)&request, sizeof(request));
 }
 
+void Crazyflie::sendSetThrustRequest(uint16_t m1, uint16_t m2, uint16_t m3, uint16_t m4) {
+    crtpMotorThrustsRequest request(m1, m2, m3, m4);
+    sendPacket((const uint8_t*)&request, sizeof(request));
+}
+
 void Crazyflie::sendExternalPositionUpdate(
   float x,
   float y,
@@ -832,4 +837,6 @@ void Crazyflie::handleBatchAck(
     // TODO: generic handle ack here?
   }
 }
+
+
 

@@ -3,29 +3,28 @@
 #define CRTP_MAX_DATA_SIZE 30
 
 // Header
-struct crtp
-{
-  constexpr crtp(uint8_t port, uint8_t channel)
-    : channel(channel)
-    , link(3)
-    , port(port)
-  {
-  }
+struct crtp {
+    constexpr crtp(uint8_t port, uint8_t channel)
+            : channel(channel), link(3), port(port), type(0) {
+    }
+    constexpr crtp(uint8_t port, uint8_t channel, uint8_t type)
+            : channel(channel), link(3), port(port), type(type) {
+    }
 
-  crtp(uint8_t byte)
-  {
-    channel = (byte >> 0) & 0x3;
-    link    = (byte >> 2) & 0x3;
-    port    = (byte >> 4) & 0xF;
-  }
+    crtp(uint8_t byte) {
+        channel = (byte >> 0) & 0x3;
+        link = (byte >> 2) & 0x3;
+        port = (byte >> 4) & 0xF;
+    }
 
-  bool operator==(const crtp& other) const {
-    return channel == other.channel && port == other.port;
-  }
+    bool operator==(const crtp &other) const {
+        return channel == other.channel && port == other.port;
+    }
 
-  uint8_t channel:2;
-  uint8_t link:2;
-  uint8_t port:4;
+    uint8_t channel:2;
+    uint8_t link:2;
+    uint8_t port:4;
+    uint8_t type:2;
 } __attribute__((packed));
 
 // Packet structure definition
@@ -203,6 +202,26 @@ struct crtpSetpointRequest
   float pitch;
   float yawrate;
   uint16_t thrust;
+}  __attribute__((packed));
+
+struct crtpMotorThrustsRequest
+{
+    crtpMotorThrustsRequest(
+            uint16_t m1,
+            uint16_t m2,
+            uint16_t m3,
+            uint16_t m4)
+            : header(0x07, 0, 6)
+            , m1(m1)
+            , m2(m2)
+            , m3(m3)
+            , m4(m4)
+    {}
+    const crtp header;
+    uint16_t m1;
+    uint16_t m2;
+    uint16_t m3;
+    uint16_t m4;
 }  __attribute__((packed));
 
 // Port 4 (Memory access)
