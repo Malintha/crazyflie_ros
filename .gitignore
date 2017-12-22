@@ -1,1 +1,6 @@
 *.pyc
+.idea/
+cmake-build-debug/
+crazyflie_demo/cmake-build-debug/
+crazyflie_demo/src/cmake-build-debug/
+
