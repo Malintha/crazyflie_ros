@@ -264,6 +264,7 @@ private:
       float pitch = - (msg->linear.x + m_pitch_trim);
       float yawrate = msg->angular.z;
       uint16_t thrust = std::min<uint16_t>(std::max<float>(msg->linear.z, 0.0), 60000);
+      std::cout<<"cmdVelChanged\n";
 
       m_cf.sendSetpoint(roll, pitch, yawrate, thrust);
       m_sentSetpoint = true;
@@ -275,6 +276,7 @@ private:
         uint16_t m2 = (uint16_t)msg->linear.y;
         uint16_t m3 = (uint16_t)msg->linear.z;
         uint16_t m4 = (uint16_t)msg->angular.x;
+        std::cout<<"cmdThrustChanged\n";
         m_cf.sendSetThrustRequest(m1, m2, m3, m4);
     }
 

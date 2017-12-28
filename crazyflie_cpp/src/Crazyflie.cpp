@@ -779,22 +779,23 @@ void Crazyflie::handleRequests(
     if (!sendPing) {
       for (const auto& request : m_batchRequests) {
         if (!request.finished) {
-          // std::cout << "sendReq" << std::endl;
           sendPacket(request.request.data(), request.request.size(), ack);
           handleBatchAck(ack);
 
           auto end = std::chrono::system_clock::now();
           std::chrono::duration<double> elapsedSeconds = end-start;
-          if (elapsedSeconds.count() > timeout) {
-            throw std::runtime_error("timeout");
-          }
+            if (elapsedSeconds.count() > timeout) {
+                std::cout << "sendReqtimeout" << std::endl;
+                throw std::runtime_error("timeout");
+            }
         }
       }
       sendPing = true;
     } else {
       for (size_t i = 0; i < 10; ++i) {
         uint8_t ping = 0xFF;
-        sendPacket(&ping, sizeof(ping), ack);
+//          std::cout << "sendping" << std::endl;
+          sendPacket(&ping, sizeof(ping), ack);
         handleBatchAck(ack);
         // if (ack.ack && crtpPlatformRSSIAck::match(ack)) {
         //   sendPing = false;
@@ -802,8 +803,9 @@ void Crazyflie::handleRequests(
 
         auto end = std::chrono::system_clock::now();
         std::chrono::duration<double> elapsedSeconds = end-start;
-        if (elapsedSeconds.count() > timeout) {
-          throw std::runtime_error("timeout");
+        if (elapsedSeconds.count() > timeout+1) {
+            std::cout << "sendpingtimout" << std::endl;
+            throw std::runtime_error("sendpingtimout.");
         }
       }
 
