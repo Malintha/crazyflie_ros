@@ -41,12 +41,14 @@ add_message_files(
   LogBlock.msg
   GenericLogData.msg
   crtpPacket.msg
+  thrustPacket.msg
 )
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
    std_msgs
+   geometry_msgs
 )
 
 ###################################

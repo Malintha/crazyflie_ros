@@ -195,7 +195,7 @@ struct crtpSetpointRequest
     float pitch,
     float yawrate,
     uint16_t thrust)
-    : header(0x03, 0)
+    : header(0x07, 0)
     , roll(roll)
     , pitch(pitch)
     , yawrate(yawrate)
@@ -203,6 +203,7 @@ struct crtpSetpointRequest
   {
   }
   const crtp header;
+  uint8_t type;
   float roll;
   float pitch;
   float yawrate;
@@ -215,14 +216,14 @@ struct crtpMotorThrustsRequest
             uint16_t m1,
             uint16_t m2,
             uint16_t m3,
-            uint16_t m4)
-            : header(6)
-            , m1(m1)
-            , m2(m2)
-            , m3(m3)
-            , m4(m4)
-    {}
-    const crtpGenericHeader header;
+            uint16_t m4):header(0x07,0),
+                         m1(m1),
+                         m2(m2),
+                         m3(m3),
+                         m4(m4){};
+
+    const crtp header;
+//    uint8_t type;
     uint16_t m1;
     uint16_t m2;
     uint16_t m3;

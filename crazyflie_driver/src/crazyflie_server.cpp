@@ -276,7 +276,7 @@ private:
         uint16_t m2 = (uint16_t)msg->linear.y;
         uint16_t m3 = (uint16_t)msg->linear.z;
         uint16_t m4 = (uint16_t)msg->angular.x;
-        std::cout<<"cmdThrustChanged\n";
+//        std::cout<<"cmdThrustChanged\n";
         m_cf.sendSetThrustRequest(m1, m2, m3, m4);
     }
 
