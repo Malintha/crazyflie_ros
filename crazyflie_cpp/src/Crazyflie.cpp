@@ -127,7 +127,7 @@ void Crazyflie::sendSetpoint(
 
 void Crazyflie::sendSetThrustRequest(uint16_t m1, uint16_t m2, uint16_t m3, uint16_t m4) {
     crtpMotorThrustsRequest request(m1,m2,m3,m4);
-    std::cout<<m1<<" "<<m2<<" "<<m3<<" "<<m4<<std::endl;
+//    std::cout<<m1<<" "<<m2<<" "<<m3<<" "<<m4<<std::endl;
     sendPacket((const uint8_t*)&request, sizeof(request));
 }
 
@@ -786,8 +786,8 @@ void Crazyflie::handleRequests(
           auto end = std::chrono::system_clock::now();
           std::chrono::duration<double> elapsedSeconds = end-start;
             if (elapsedSeconds.count() > timeout) {
-                std::cout << "sendReqtimeout" << std::endl;
-                throw std::runtime_error("timeout");
+//                std::cout << "sendReqtimeout" << std::endl;
+//                throw std::runtime_error("timeout");
             }
         }
       }
