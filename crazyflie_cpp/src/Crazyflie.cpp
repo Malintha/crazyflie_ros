@@ -804,10 +804,10 @@ void Crazyflie::handleRequests(
 
         auto end = std::chrono::system_clock::now();
         std::chrono::duration<double> elapsedSeconds = end-start;
-        if (elapsedSeconds.count() > timeout+1) {
-            std::cout << "sendpingtimout" << std::endl;
-            throw std::runtime_error("sendpingtimout.");
-        }
+//        if (elapsedSeconds.count() > timeout+1) {
+//            std::cout << "sendpingtimout" << std::endl;
+//            throw std::runtime_error("sendpingtimout.");
+//        }
       }
 
       sendPing = false;

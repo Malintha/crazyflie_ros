@@ -532,7 +532,7 @@ private:
 
   void onLinkQuality(float linkQuality) {
       if (linkQuality < 0.7) {
-        ROS_WARN("Link Quality low (%f)", linkQuality);
+//        ROS_WARN("Link Quality low (%f)", linkQuality);
       }
   }
 
